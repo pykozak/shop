@@ -3,6 +3,8 @@ import os
 
 from django.core.exceptions import ImproperlyConfigured
 
+from mongoengine import connect
+
 SRC_DIR = os.path.dirname(os.path.dirname(__file__))
 ROOT_DIR = os.path.dirname(SRC_DIR)
 
@@ -50,8 +52,6 @@ ROOT_URLCONF = 'project.urls'
 
 WSGI_APPLICATION = 'project.wsgi.application'
 
-DATABASES = get_secret('DATABASES')
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -63,3 +63,7 @@ USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
+
+MONGO = get_secret('MONGO')
+
+connect(**MONGO)
