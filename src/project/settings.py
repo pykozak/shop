@@ -1,6 +1,7 @@
 import os
 
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+SRC_DIR = os.path.dirname(os.path.dirname(__file__))
+ROOT_DIR = os.path.dirname(SRC_DIR)
 
 SECRET_KEY = '%ms#z)ol#jvz8irlezo6#&756ekts6xgb()&81!=9j^f^va2&w'
 
@@ -36,7 +37,7 @@ WSGI_APPLICATION = 'project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join(ROOT_DIR, 'db.sqlite3'),
     }
 }
 
