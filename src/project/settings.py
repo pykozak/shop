@@ -1,9 +1,25 @@
+import json
 import os
+
+from django.core.exceptions import ImproperlyConfigured
 
 SRC_DIR = os.path.dirname(os.path.dirname(__file__))
 ROOT_DIR = os.path.dirname(SRC_DIR)
 
-SECRET_KEY = '%ms#z)ol#jvz8irlezo6#&756ekts6xgb()&81!=9j^f^va2&w'
+SECRET_FILE = os.path.join(ROOT_DIR, 'secrets.json')
+
+with open(SECRET_FILE) as f:
+    SECRETS = json.load(f)
+
+
+def get_secret(setting, secrets=SECRETS):
+    try:
+        return secrets[setting]
+    except KeyError:
+        raise ImproperlyConfigured('Set secret value: {0}'.format(setting))
+
+
+SECRET_KEY = get_secret('SECRET_KEY')
 
 DEBUG = True
 
@@ -34,12 +50,7 @@ ROOT_URLCONF = 'project.urls'
 
 WSGI_APPLICATION = 'project.wsgi.application'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(ROOT_DIR, 'db.sqlite3'),
-    }
-}
+DATABASES = get_secret('DATABASES')
 
 LANGUAGE_CODE = 'en-us'
 
