@@ -137,3 +137,42 @@ class ProductDetailAPIViewTests(MongoTestCase):
         self.assertEqual(str(self.product.promotion_price),
                          record['promotion_price'])
 
+
+class CategoryAPIViewTests(MongoTestCase):
+    records = [
+        {
+            'name': 'długopis',
+            'price': 3,
+            'promotion_price': 1,
+            'category': 'artykuły biurowe'
+        },
+        {
+            'name': 'ołówek',
+            'price': 2,
+            'promotion_price': 1,
+            'category': 'artykuły biurowe'
+        },
+        {
+            'name': 'tulipan',
+            'price': 3,
+            'promotion_price': 1,
+            'category': 'kwiaty cięte'
+        }
+    ]
+
+    def setUp(self):
+        self.factory = factories.ProductFactory()
+        self.factory.create_from_json_records(self.records)
+        self.url = reverse('category_list')
+        self.response = self.client.get(self.url)
+        self.categories_data = json.loads(self.response.content.decode('utf-8'))
+
+    def test_status_200(self):
+        self.assertEqual(200, self.response.status_code)
+
+    def test_count(self):
+        self.assertEqual(2, len(self.categories_data))
+
+    def test_product_count(self):
+        self.assertEqual(2, self.categories_data[0]['product_count'])
+        self.assertEqual(1, self.categories_data[1]['product_count'])
