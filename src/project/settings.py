@@ -1,9 +1,10 @@
 import json
 import os
+import sys
 
 from django.core.exceptions import ImproperlyConfigured
 
-from mongoengine import connect
+import mongoengine
 
 SRC_DIR = os.path.dirname(os.path.dirname(__file__))
 ROOT_DIR = os.path.dirname(SRC_DIR)
@@ -65,6 +66,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-MONGO = get_secret('MONGO')
-
-connect(**MONGO)
+if 'test' not in sys.argv:
+    MONGO = get_secret('MONGO')
+    mongoengine.connect(**MONGO)
