@@ -10,3 +10,7 @@ class Product(mongoengine.Document):
 class Category(mongoengine.Document):
     name = mongoengine.StringField()
     products = mongoengine.ListField(mongoengine.ReferenceField(Product))
+
+    @property
+    def product_count(self):
+        return len(self.products)
