@@ -10,6 +10,11 @@ urlpatterns = patterns('',
         view=api_views.ProductAPIView.as_view(),
         name='product_list'
     ),
+    url(
+        regex=r'^product/(?P<id>\w+)/$',
+        view=api_views.ProductDetailAPIView.as_view(),
+        name='product_detail'
+    )
 )
 
 urlpatterns = format_suffix_patterns(urlpatterns)
