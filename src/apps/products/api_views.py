@@ -10,3 +10,8 @@ class ProductAPIView(generics.ListAPIView):
     def get_queryset(self):
         category = models.Category.objects.get(id=self.kwargs['category_id'])
         return category.products
+
+
+class ProductDetailAPIView(generics.RetrieveAPIView):
+    serializer_class = serializers.ProductSerializer
+    queryset = models.Product.objects.all()
