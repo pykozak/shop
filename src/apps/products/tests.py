@@ -1,3 +1,7 @@
+import json
+
+from django.core.urlresolvers import reverse
+
 from commons.testing import MongoTestCase
 
 from . import factories
@@ -56,3 +60,39 @@ class ProductFactoryTests(MongoTestCase):
         self.factory.create_from_json_records(self.records)
         self.assertEqual(models.Category.objects.count(), 2)
 
+
+class ProductAPIViewTests(MongoTestCase):
+    records = [
+        {
+            'name': 'długopis',
+            'price': 3,
+            'promotion_price': 1,
+            'category': 'artykuły biurowe'
+        },
+        {
+            'name': 'ołówek',
+            'price': 2,
+            'promotion_price': 1,
+            'category': 'artykuły biurowe'
+        },
+        {
+            'name': 'tulipan',
+            'price': 3,
+            'promotion_price': 1,
+            'category': 'kwiaty cięte'
+        }
+    ]
+
+    def setUp(self):
+        self.factory = factories.ProductFactory()
+        self.factory.create_from_json_records(self.records)
+        category = models.Category.objects.get(name='artykuły biurowe')
+        self.url = reverse('product_list', args=[category.id])
+        self.response = self.client.get(self.url)
+
+    def test_status_200(self):
+        self.assertEqual(200, self.response.status_code)
+
+    def test_record_count(self):
+        data = json.loads(self.response.content.decode('utf-8'))
+        self.assertEqual(2, len(data))
