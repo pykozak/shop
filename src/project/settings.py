@@ -68,6 +68,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+SESSION_ENGINE = 'mongoengine.django.sessions'
+
+SESSION_SERIALIZER = 'mongoengine.django.sessions.BSONSerializer'
+
 if 'test' not in sys.argv:
     MONGO = get_secret('MONGO')
     mongoengine.connect(**MONGO)
